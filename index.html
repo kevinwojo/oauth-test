@@ -1,0 +1,65 @@
+<html>
+	<head>
+		<title>Test</title>
+		<script src="jquery-1.11.3.min.js"></script>
+	</head>
+	<script>
+		$(document).ready(function() {
+			$('#authorizeChat').click(function(){
+				var url = "https://kevdev.com/developer/oauth";
+				var oauth_action = "authorize";
+				var clientid = "a999ba54c482a822a61d992d108bf857"
+				var authState = "randomstringunc";
+				var responseType = "code";
+				var redirectUri = "http://kevdevtest.com/oauth-test/";
+
+				var link = url + "/" + oauth_action 
+					+ '?client_id=' + clientid
+					+ '&state=' + authState
+					+ '&response_type=' + responseType
+					+ '&redirect_uri=' + redirectUri;
+
+				$(this).attr('href', link);
+			});
+
+			parameters = window.location.search.substring(1);
+
+			paramArray = parameters.split('&');
+			var x = 0;
+			$(paramArray).each(function(){
+				
+				var pair = (this).split('=');
+
+				if (pair[0] == 'code')
+				{
+					var url = "https://kevdev.com/developer/oauth";
+					var oauth_action = "token";
+					var clientid = "a999ba54c482a822a61d992d108bf857"
+					var clientSecret = "e78a80532a7259675d1ff78fa33be7c75af9cd0a";
+					var grantType = "authorization_code";
+					var redirectUri = "http://kevdevtest.com/oauth-test/";
+
+					var link2 = url + "/" + oauth_action 
+					+ '?client_id=' + clientid
+					+ '&client_secret=' + clientSecret
+					+ '&grant_type=' + grantType
+					+ '&code=' + pair[1];
+
+					console.log(pair[1]);
+
+					$.post(link2, function(result){
+							console.log(result);
+						});
+				}
+			});
+
+		});
+	</script>
+	<body>
+		<h1>Test Application</h1>
+		<a id="authorizeChat">Step 1</a>
+		<a id="getToken"> Step 2 </a>
+
+		<div id="window"></div>
+	</body>
+</html>
